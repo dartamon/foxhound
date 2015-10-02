@@ -1,0 +1,30 @@
+<html>
+<head>
+    {% load staticfiles %}
+    <title>Welcome to the Foxhound search.</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'sample/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'sample/image-picker.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'sample/jquery.tag-editor.css' %}" />
+</head>
+<body>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<h1>Start new search</h1>
+
+<h2>Search parameters</h2>
+
+<form action="{% url 'sample:search' %}" method="post">
+    {% csrf_token %}
+    <p>Search term 1:</p>
+    <input type="text" name="query1" id="txtQuery1" />
+    <p>Search term 2:</p>
+    <input type="text" name="query2" id="txtQuery2" />
+    <p>Search term 3:</p>
+    <input type="text" name="query3" id="txtQuery3" />
+    <br>
+    <input type="submit" value="Search" />
+</form>
+
+</body>
+</html>

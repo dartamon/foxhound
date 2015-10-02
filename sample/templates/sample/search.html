@@ -1,0 +1,72 @@
+<html>
+<head>
+    {% load staticfiles %}
+    <title>Welcome to the Foxhound search.</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'sample/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'sample/image-picker.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'sample/jquery.tag-editor.css' %}" />
+</head>
+<body>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<h1>Search Session {{ sessionid }}</h1>
+
+<h2>Search parameters</h2>
+
+<form action="{% url 'sample:search' %}" method="post">
+    {% csrf_token %}
+    <h3>Images</h3>
+    <select id="queryImages" multiple="multiple" class="image-picker show-html">
+      {% for url in queryImageUrls %}
+          <option data-img-src="{{ url }}" value="{{ url }}">{{ url }}</option>
+      {% endfor %}
+    </select>
+    <h3>Searched Keywords</h3>
+    <textarea id="queryKeywords"></textarea>
+    <h3>New Keywords</h3>
+    <p>Search term 1:</p>
+    <input type="text" name="query4" />
+    <p>Search term 2:</p>
+    <input type="text" name="query5" />
+    <p>Search term 3:</p>
+    <input type="text" name="query6" />
+    <br>
+    <input type="hidden" name="sessionname" value="{{ sessionid }}" />
+    <input type="submit" value="Search" />
+</form>
+
+<h2>Search results</h2>
+
+<textarea id="resultKeywords"></textarea>
+
+<select id="resultImages" multiple="multiple" class="image-picker show-html">
+  {% for url in resultImageUrls %}
+      <option data-img-src="{{ url }}" value="{{ url }}">{{ url }}</option>
+  {% endfor %}
+</select>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="{% static 'sample/image-picker.js' %}"></script>
+<script type="text/javascript" src="{% static 'sample/jquery.caret.js' %}"></script>
+<script type="text/javascript" src="{% static 'sample/jquery.tag-editor.min.js' %}"></script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function(event) {
+        $("#queryImages").imagepicker();
+        $("#resultImages").imagepicker();
+        $('#queryKeywords').tagEditor({
+            clickDelete: true,
+            initialTags: {{ initialTags|safe }},
+            placeholder: 'Enter tags ...'
+        });
+        $('#resultKeywords').tagEditor({
+            clickDelete: true,
+            initialTags: {{ resultTags|safe }},
+            placeholder: 'Enter tags ...'
+        });
+    });
+</script>
+
+
+</body>
+</html>
